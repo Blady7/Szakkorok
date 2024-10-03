@@ -77,9 +77,9 @@ export default {
         { id: 4, nev: "Nem jár szakkörre" },
       ],
       szakkorTanulok: {
-        Foci: [],
-        Zene: [],
-        Programozas: [],
+        Tollaslabda: [],
+        Lábtolllabda: [],
+        Röplabda: [],
       },
     };
   },
