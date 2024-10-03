@@ -7,8 +7,13 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Diákok</th>
-              <th scope="col">Osztályok</th>
+              <!-- Kattintható fejléc a szortírozáshoz -->
+              <th scope="col">
+                <button @click="setSortKey('nev')">Diákok</button>
+              </th>
+              <th scope="col">
+                <button @click="setSortKey('osztaly')">Osztályok</button>
+              </th>
               <th scope="col">Szakkörök</th>
             </tr>
           </thead>
@@ -17,10 +22,7 @@
               <td class="my-td">{{ tanulo.nev }}</td>
               <td class="my-td">{{ tanulo.osztaly }}</td>
               <td>
-                <select
-                  class="form-select"
-                  v-model="tanulo.szakkorId"        
-                >
+                <select class="form-select" v-model="tanulo.szakkorId">
                   <option
                     v-for="szakkor in szakkorok"
                     :key="szakkor.id"
@@ -54,21 +56,21 @@
 import Szakkorok from "@/components/Szakkorok.vue";
 export default {
   components: {
-    Szakkorok
+    Szakkorok,
   },
   data() {
     return {
       tanulok: [
         { id: 1, nev: "Kovács Péter", osztaly: "9.A", szakkorId: 4 },
-        { id: 2, nev: "Szabó Juli", osztaly: "10.B", szakkorId: 4 },
-        { id: 3, nev: "Tóth Gábor", osztaly: "11.C", szakkorId: 4 },
+        { id: 2, nev: "Szabó Juli", osztaly: "10.A", szakkorId: 4 },
+        { id: 3, nev: "Tóth Gábor", osztaly: "9.A", szakkorId: 4 },
         { id: 4, nev: "Tóth Katalin", osztaly: "9.A", szakkorId: 4 },
-        { id: 5, nev: "Zsigmond Tamás", osztaly: "10.B", szakkorId: 4 },
-        { id: 6, nev: "Horváth Zoltán", osztaly: "11.C", szakkorId: 4 },
-        { id: 7, nev: "Balogh Bálint", osztaly: "10.B", szakkorId: 4 },
+        { id: 5, nev: "Zsigmond Tamás", osztaly: "10.A", szakkorId: 4 },
+        { id: 6, nev: "Horváth Zoltán", osztaly: "9.A", szakkorId: 4 },
+        { id: 7, nev: "Balogh Bálint", osztaly: "10.A", szakkorId: 4 },
         { id: 8, nev: "Molnár Ádám", osztaly: "9.A", szakkorId: 4 },
-        { id: 9, nev: "Nagy László", osztaly: "10.B", szakkorId: 4 },
-        { id: 10, nev: "Papp Attila", osztaly: "11.C", szakkorId: 4 },
+        { id: 9, nev: "Nagy László", osztaly: "10.A", szakkorId: 4 },
+        { id: 10, nev: "Papp Attila", osztaly: "10.A", szakkorId: 4 },
       ],
       szakkorok: [
         { id: 1, nev: "Tollaslabda" },
@@ -76,16 +78,28 @@ export default {
         { id: 3, nev: "Röplabda" },
         { id: 4, nev: "Nem jár szakkörre" },
       ],
-      szakkorTanulok: {
-        Tollaslabda: [],
-        Lábtolllabda: [],
-        Röplabda: [],
-      },
+      sortKey: 'nev',
+      sortDirection: 'asc',
     };
   },
   computed: {
     sortedTanulok() {
-      return this.tanulok.sort((a, b) => a.nev.localeCompare(b.nev));
+      return this.tanulok.sort((a, b) => {
+        let modifier = this.sortDirection === 'asc' ? 1 : -1;
+        if (a[this.sortKey] < b[this.sortKey]) return -1 * modifier;
+        if (a[this.sortKey] > b[this.sortKey]) return 1 * modifier;
+        return 0;
+      });
+    },
+  },
+  methods: {
+    setSortKey(key) {
+      if (this.sortKey === key) {
+        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.sortKey = key;
+        this.sortDirection = 'asc';
+      }
     },
   },
 };
